@@ -25,8 +25,57 @@ ORDER BY i.invoiceId
 
 -- Provide a query that shows the Invoice Total, Customer name, Country and Sale Agent name for all invoices
 --  and customers.
-
+SELECT DISTINCT e.FirstName, e.LastName, i.InvoiceId, c.FirstName, c.LastName, i.Total, i.BillingCountry
+FROM Employee e, Customer c, Invoice i WHERE e.EmployeeId = c.SupportRepId AND c.customerId = i.customerId
+ORDER BY i.InvoiceId
 
 -- How many Invoices were there in 2009 and 2011? What are the respective total sales for each of those years?
+SELECT COUNT(strftime('%Y',InvoiceDate))as 'Total Invoices', SUM(total)as 'Total Sales' FROM Invoice
+WHERE strftime('%Y',InvoiceDate)= '2009' OR strftime('%Y',InvoiceDate)= '2011' GROUP BY strftime('%Y',InvoiceDate)
+
 -- Looking at the InvoiceLine table, provide a query that COUNTs the number of line items for Invoice ID 37.
--- Looking at the InvoiceLine table, provide a query that COUNTs the number of line items for each Invoice. HINT: GROUP BY
+
+SELECT COUNT(InvoiceId)AS 'Line Items' FROM InvoiceLine WHERE InvoiceId = 37
+
+-- Looking at the InvoiceLine table, provide a query that COUNTs the number of line items for each Invoice.
+-- HINT: GROUP BY
+
+SELECT InvoiceId,COUNT(InvoiceId)as 'Line Items' FROM InvoiceLine GROUP BY InvoiceId
+
+-- Provide a query that includes the track name with each invoice line item.
+SELECT i.InvoiceId, i.TrackId, t.Name as "Song Title" FROM InvoiceLine i, Track t WHERE i.trackId = t.trackId
+
+
+-- Provide a query that includes the purchased track name AND artist name with each invoice line item.
+SELECT i.InvoiceId, i.TrackId, t.Name, ar.Name as "Song Title" FROM InvoiceLine i, Track t,Album a, Artist ar
+WHERE i.trackId =t.trackId AND t.AlbumId= a.AlbumId AND a.artistId = ar.artistId
+
+-- Provide a query that shows the # of invoices per country. HINT: GROUP BY
+SELECT BillingCountry, COUNT(InvoiceId)as 'Number of Invoices' FROM Invoice GROUP BY BillingCountry
+
+-- Provide a query that shows the total number of tracks in each playlist.
+-- The Playlist name should be included on the resultant table.
+SELECT pt.TrackId, COUNT(pt.trackId)
+as 'Number of Tracks', p.Name
+as 'Playlist Name' FROM track t, playlisttrack pt, playlist p
+WHERE t.trackId= pt.trackId AND pt.playlistId = p.playlistId
+GROUP BY pt.trackId
+
+
+-- Provide a query that shows all the Tracks, but displays no IDs.
+-- The resultant table should include the Album name, Media type and Genre.
+
+
+
+-- Provide a query that shows all Invoices but includes the # of invoice line items.
+-- Provide a query that shows total sales made by each sales agent.
+-- Which sales agent made the most in sales in 2009?
+-- Which sales agent made the most in sales in 2010?
+-- Which sales agent made the most in sales over all?
+-- Provide a query that shows the # of customers assigned to each sales agent.
+-- Provide a query that shows the total sales per country. Which country's customers spent the most?
+-- Provide a query that shows the most purchased track of 2013.
+-- Provide a query that shows the top 5 most purchased tracks over all.
+-- Provide a query that shows the top 3 best selling artists.
+-- Provide a query that shows the most purchased Media Type.
+-- Provide a query that shows the number tracks purchased in all invoices that contain more than one genre.
