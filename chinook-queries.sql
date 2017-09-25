@@ -61,21 +61,72 @@ as 'Playlist Name' FROM track t, playlisttrack pt, playlist p
 WHERE t.trackId= pt.trackId AND pt.playlistId = p.playlistId
 GROUP BY pt.trackId
 
-
 -- Provide a query that shows all the Tracks, but displays no IDs.
 -- The resultant table should include the Album name, Media type and Genre.
 
-
+SELECT t.name as 'Track Name', a.title as 'Album Title', m.name
+as 'Media Type', g.name as'Genre' FROM Track t, Album a, MediaType m, Genre g
+WHERE t.albumId = a.albumId
+AND t.MediaTypeId = m.MediaTypeId
+AND t.GenreId= g.GenreId
 
 -- Provide a query that shows all Invoices but includes the # of invoice line items.
+SELECT i.invoiceId, COUNT(li.invoiceId) AS 'Line Items'
+FROM Invoice i, InvoiceLine li
+WHERE i.invoiceid= li.InvoiceId
+GROUP By i.invoiceId
+
 -- Provide a query that shows total sales made by each sales agent.
+SELECT e.FirstName, e.LastName, SUM(i.Total)as 'TOTAL SALES'
+FROM Employee e, Customer c, Invoice i
+WHERE e.EmployeeId = c.SupportRepId
+AND c.customerId = i.customerId
+GROUP BY e.FirstName
+
 -- Which sales agent made the most in sales in 2009?
+SELECT e.FirstName, e.LastName, SUM(i.Total)as 'TOTAL SALES in 2009'
+FROM Employee e, Customer c, Invoice i
+WHERE e.EmployeeId = c.SupportRepId
+AND c.customerId = i.customerId
+AND strftime('%Y', InvoiceDate)= '2009'
+GROUP BY e.LastName
+
 -- Which sales agent made the most in sales in 2010?
+
+SELECT e.FirstName, e.LastName, SUM(i.Total)as 'TOTAL SALES in 2009'
+FROM Employee e, Customer c, Invoice i
+WHERE e.EmployeeId = c.SupportRepId
+AND c.customerId = i.customerId
+AND strftime('%Y', InvoiceDate)= '2010'
+GROUP BY e.LastName
+
 -- Which sales agent made the most in sales over all?
+SELECT e.FirstName, e.LastName, SUM(i.Total)as 'TOTAL SALES in 2009'
+FROM Employee e, Customer c, Invoice i
+WHERE e.EmployeeId = c.SupportRepId
+AND c.customerId = i.customerId
+GROUP BY e.LastName
+
 -- Provide a query that shows the # of customers assigned to each sales agent.
+
+
 -- Provide a query that shows the total sales per country. Which country's customers spent the most?
+
+
 -- Provide a query that shows the most purchased track of 2013.
+
+
 -- Provide a query that shows the top 5 most purchased tracks over all.
+
+
 -- Provide a query that shows the top 3 best selling artists.
+
+
 -- Provide a query that shows the most purchased Media Type.
+
+
 -- Provide a query that shows the number tracks purchased in all invoices that contain more than one genre.
+SELECT InvoiceLine.InvoiceId, COUNT(DISTINCT Genre.GenreId), COUNT(InvoiceLine.InvoiceLineId)
+FROM track, Genre, InvoiceLine Where Track.GenreId=
+GROUP BY InvoiceLine.InvoiceId
+-- having Count
